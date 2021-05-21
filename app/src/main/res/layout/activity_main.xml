@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<com.google.android.material.textfield.TextInputEditText
+    android:id="@+id/title"
+    android:layout_marginTop="380dp"
+    android:textColorHint="#000000"
+    android:hint="titale"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputEditText
+    android:id="@+id/message"
+    android:textColorHint="#000000"
+    android:hint="message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+
+<com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_notification_on"
+    android:text="Click Here !"
+    android:layout_marginTop="80dp"
+    android:layout_gravity="center"
+    app:cornerRadius="6dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+</LinearLayout>
