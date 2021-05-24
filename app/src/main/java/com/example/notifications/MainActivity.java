@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
-    // نتيجة الحصول على توكن المستخدم
+    // نتيجة الحصول على token المستخدم
     private void gettoken() {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
