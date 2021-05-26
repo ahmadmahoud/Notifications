@@ -34,78 +34,82 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    EditText text1,text2;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        text1=findViewById(R.id.title);
+        text2=findViewById(R.id.message);
 
         gettoken();
+
     }
 
     // تشغيل الاشعارات
-//    private void send_notificaion() {
-//
-//        // لارسال الكلمات الى الاشعارات
-//        String title = text1.getText().toString();
-//        String message = text2.getText().toString();
-//
-//        NotificationManager notificationManager = (NotificationManager)
-//                getSystemService(Context.NOTIFICATION_SERVICE);
-//        String NOTIFICAION_CHANEL_1 = "geecoders";
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//
-//            // الاكواد الخاصه لتغغير الصوت
-//            Uri uri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.test);
-//
-//            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                    .setUsage(AudioAttributes.USAGE_ALARM).build();
-//
-//            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICAION_CHANEL_1, "geecoder", NotificationManager.IMPORTANCE_HIGH);
-//
-//            notificationChannel.setDescription("geecoders chanel is test");
-//            notificationChannel.enableLights(true);
-//            notificationChannel.setLightColor(Color.BLUE);
-//            notificationChannel.setVibrationPattern(new long[]{ 0 });
-//            notificationChannel.enableVibration(true);
-//            notificationChannel.setSound(uri, audioAttributes);
-//
-//
-//            notificationManager.createNotificationChannel(notificationChannel);
-//        }
-//
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICAION_CHANEL_1);
-//
-//        // عمل صورة مكبرة لاحظ ان تكون لا تكون الصيغة svg ويفضل png
-//        Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pnginage);
-//
-//        notificationBuilder
-//                .setAutoCancel(true)
-//                .setDefaults(Notification.DEFAULT_ALL)
-//                .setWhen(System.currentTimeMillis())
-//                .setShowWhen(true)
-//                .setLargeIcon(myBitmap)
-//
-//                // كيفية عرض النص كامل عند السحب
-//                .setStyle(new NotificationCompat.BigTextStyle()
-//                        .bigText(getString(R.string.geecodersmessage)))
-//
-////                .setStyle(new NotificationCompat.InboxStyle()
-////                        .addLine("messageSnippet1")
-////                        .addLine("messageSnippet2"))
-//
-//                .setSmallIcon(R.drawable.ic_baseline_fastfood_24)
-//                .setContentTitle(title)
-//                .setContentText(message)
-//                .setSubText("info");
-//
-//        notificationManager.notify(1, notificationBuilder.build());
-//
-//
-//    }
+    private void send_notificaion() {
+
+        // لارسال الكلمات الى الاشعارات
+        String title = text1.getText().toString();
+        String message = text2.getText().toString();
+
+        NotificationManager notificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+        String NOTIFICAION_CHANEL_1 = "geecoders";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // الاكواد الخاصه لتغغير الصوت
+            Uri uri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.test);
+
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_ALARM).build();
+
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICAION_CHANEL_1, "geecoder", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("geecoders chanel is test");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setVibrationPattern(new long[]{ 0 });
+            notificationChannel.enableVibration(true);
+            notificationChannel.setSound(uri, audioAttributes);
+
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICAION_CHANEL_1);
+
+        // عمل صورة مكبرة لاحظ ان تكون لا تكون الصيغة svg ويفضل png
+        Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pnginage);
+
+        notificationBuilder
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setShowWhen(true)
+                .setLargeIcon(myBitmap)
+
+                // كيفية عرض النص كامل عند السحب
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(getString(R.string.geecodersmessage)))
+
+//                .setStyle(new NotificationCompat.InboxStyle()
+//                        .addLine("messageSnippet1")
+//                        .addLine("messageSnippet2"))
+
+                .setSmallIcon(R.drawable.ic_baseline_fastfood_24)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSubText("info");
+
+        notificationManager.notify(1, notificationBuilder.build());
+
+
+    }
 
     // نتيجة الحصول على token المستخدم
     private void gettoken() {
@@ -127,17 +131,18 @@ public class MainActivity extends AppCompatActivity {
         data.addProperty("title", "Title value");
         data.addProperty("message", "Message value");
 
-//            data.addProperty(key.getText().toString(), value.getText().toString());
         // add data payload
         payload.add("data", data);
         return payload;
+
+        // { "to" : "token value"
+        // "data" : {  title_value , "message" : " Message value "  }
+        // }
+
     }
 
-    // { "to" : "token value"
-    // "data" : {  title_value , "message" : " Message value "  }
-    // }
 
-
+    // دفع الاشعار يمكنك عمل زر واستدعائها بداخله
     private void pushNotification() {
         JsonObject payload = buildNotificationPayload();
         // send notification to receiver ID
