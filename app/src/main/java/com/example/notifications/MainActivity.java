@@ -28,6 +28,8 @@ import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +37,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     EditText text1,text2;
+    Button push;
 
 
     @Override
@@ -43,8 +46,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         text1=findViewById(R.id.title);
         text2=findViewById(R.id.message);
+        push=findViewById(R.id.btn_notification_on);
 
-        gettoken();
+        push.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send_notificaion();
+            }
+        });
+
+//        gettoken();
+
 
     }
 
@@ -57,19 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
+
         String NOTIFICAION_CHANEL_1 = "geecoders";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             // الاكواد الخاصه لتغغير الصوت
             Uri uri = Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.test);
-
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ALARM).build();
 
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICAION_CHANEL_1, "geecoder", NotificationManager.IMPORTANCE_HIGH);
-
             notificationChannel.setDescription("geecoders chanel is test");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
@@ -77,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
             notificationChannel.enableVibration(true);
             notificationChannel.setSound(uri, audioAttributes);
 
-
             notificationManager.createNotificationChannel(notificationChannel);
+
         }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICAION_CHANEL_1);
@@ -93,21 +104,25 @@ public class MainActivity extends AppCompatActivity {
                 .setShowWhen(true)
                 .setLargeIcon(myBitmap)
 
-                // كيفية عرض النص كامل عند السحب
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(getString(R.string.geecodersmessage)))
+                // كيفية عرض النص كامل عند السحب عند طريق سهم في الاعلى
+//                .setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText(getString(R.string.geecodersmessage)))
 
+                // عرض التفاصيل عند السحب بدون السهم
 //                .setStyle(new NotificationCompat.InboxStyle()
-//                        .addLine("messageSnippet1")
-//                        .addLine("messageSnippet2"))
+//                        .addLine("messageSnippet1"))
 
                 .setSmallIcon(R.drawable.ic_baseline_fastfood_24)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSubText("info");
 
-        notificationManager.notify(1, notificationBuilder.build());
 
+        notificationManager.notify(0, notificationBuilder.build());
+
+// لعمل اكثر من اشعار بدلا من اشعار واحد (multiple notifications)
+//        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+//        notificationManager.notify(m, notificationBuilder.build());
 
     }
 

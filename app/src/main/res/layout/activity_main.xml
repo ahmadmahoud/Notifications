@@ -13,14 +13,17 @@
     android:layout_marginTop="380dp"
     android:textColorHint="#000000"
     android:hint="titale"
-    android:layout_width="match_parent"
+    android:backgroundTint="#F19292"
+    android:layout_gravity="center"
+    android:layout_width="280dp"
     android:layout_height="wrap_content" />
 
     <com.google.android.material.textfield.TextInputEditText
     android:id="@+id/message"
     android:textColorHint="#000000"
     android:hint="message"
-    android:layout_width="match_parent"
+        android:layout_gravity="center"
+    android:layout_width="280dp"
     android:layout_height="wrap_content" />
 
 
