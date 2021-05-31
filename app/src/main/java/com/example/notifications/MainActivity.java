@@ -7,7 +7,9 @@ import androidx.core.app.NotificationCompat;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -15,6 +17,7 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +32,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +41,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    EditText text1,text2;
+    EditText text1, text2;
     Button push;
 
 
@@ -44,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text1=findViewById(R.id.title);
-        text2=findViewById(R.id.message);
-        push=findViewById(R.id.btn_notification_on);
+        text1 = findViewById(R.id.title);
+        text2 = findViewById(R.id.message);
+        push = findViewById(R.id.btn_notification_on);
 
         push.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +68,17 @@ public class MainActivity extends AppCompatActivity {
     // تشغيل الاشعارات
     private void send_notificaion() {
 
-        // لارسال الكلمات الى الاشعارات
         String title = text1.getText().toString();
         String message = text2.getText().toString();
+
+        // نقل المستخدم الى الاشعار المطلوب
+        Map<String,String> data = new HashMap();
+        String usetid = data.get("userid");
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("key",usetid);
+        PendingIntent pendIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         NotificationManager notificationManager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
@@ -84,25 +97,25 @@ public class MainActivity extends AppCompatActivity {
             notificationChannel.setDescription("geecoders chanel is test");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.BLUE);
-            notificationChannel.setVibrationPattern(new long[]{ 0 });
+            notificationChannel.setVibrationPattern(new long[]{0});
             notificationChannel.enableVibration(true);
             notificationChannel.setSound(uri, audioAttributes);
 
             notificationManager.createNotificationChannel(notificationChannel);
 
         }
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICAION_CHANEL_1);
-
         // عمل صورة مكبرة لاحظ ان تكون لا تكون الصيغة svg ويفضل png
         Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pnginage);
 
-        notificationBuilder
+         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICAION_CHANEL_1)
+
                 .setAutoCancel(true)
+                 .setContentIntent(pendIntent)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setShowWhen(true)
-                .setLargeIcon(myBitmap)
+                 .setLargeIcon(myBitmap)
+//                .setLargeIcon(myBitmap)
 
                 // كيفية عرض النص كامل عند السحب عند طريق سهم في الاعلى
 //                .setStyle(new NotificationCompat.BigTextStyle()
@@ -115,12 +128,13 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_baseline_fastfood_24)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSubText("info");
-
+                .setSubText("Geecoders");
 
         notificationManager.notify(0, notificationBuilder.build());
 
+
 // لعمل اكثر من اشعار بدلا من اشعار واحد (multiple notifications)
+
 //        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 //        notificationManager.notify(m, notificationBuilder.build());
 
@@ -137,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-   // كود يقوم بتحويل اكواد الجيسون
+    // كود يقوم بتحويل اكواد الجيسون
     private JsonObject buildNotificationPayload() {  // { object } يتعامل مع ,  [ Array ] يتعامل مع  + compose notification json payload
         JsonObject payload = new JsonObject();
         payload.addProperty("to", "Token");
