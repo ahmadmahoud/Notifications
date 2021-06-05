@@ -20,11 +20,10 @@ public class ApiClient {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-
         return retrofit.create(NotificationApiService.class);
-
     }
 
+    // لان body هنا يتعامل بلغة json لذلك نحتاج ان نحوله عن طريق هذة الخطوة
     private static OkHttpClient provideClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
